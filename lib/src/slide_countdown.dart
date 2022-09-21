@@ -212,7 +212,10 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
     if (widget.countUp != oldWidget.countUp ||
         widget.infinityCountUp != oldWidget.infinityCountUp) {
       _streamDuration.dispose();
+      _notifiyDuration = NotifiyDuration(widget.duration);
+      _disposed = false;
       _streamDurationListener();
+      _updateConfigurationNotifier(widget.duration);
     }
     if (widget.duration != oldWidget.duration) {
       _streamDuration.changeDuration(widget.duration);
