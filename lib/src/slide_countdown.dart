@@ -48,6 +48,7 @@ class SlideCountdown extends StatefulWidget {
     this.shouldShowSeconds,
     this.isSubTitle = false,
     this.subTextStyle,
+    this.isShowDay = false,
   }) : super(key: key);
 
   /// [Duration] is the duration of the countdown slide,
@@ -186,6 +187,8 @@ class SlideCountdown extends StatefulWidget {
   /// [subTextStyle] style of a sub timer when [isSubTitle] is return true
   final TextStyle? subTextStyle;
 
+  final bool isShowDay;
+
   @override
   _SlideCountdownState createState() => _SlideCountdownState();
 }
@@ -318,9 +321,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
         final defaultShowSeconds =
             duration.inSeconds < 1 && !widget.showZeroValue ? false : true;
 
-        final showDays = widget.shouldShowDays != null
-            ? widget.shouldShowDays!(duration)
-            : defaultShowDays;
+        final showDays = widget.shouldShowDays != null ? widget.shouldShowDays!(duration) : defaultShowDays;
         final showHours = widget.shouldShowHours != null
             ? widget.shouldShowHours!(duration)
             : defaultShowHours;
@@ -402,7 +403,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
           showSeparator: isSeparatorTitle && showSeconds,
         );
 
-        final daysWidget = showDays ? days : const SizedBox.shrink();
+        final daysWidget = _showDayWidget(showDays, days);
 
         final hoursWidget = showHours ? hours : const SizedBox.shrink();
 
@@ -410,7 +411,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
 
         final secondsWidget = showSeconds ? seconds : const SizedBox.shrink();
 
-        final groupDaysWidget = Container(
+        final groupDaysWidget = widget.isShowDay ? Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -421,7 +422,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
               )
             ],
           ),
-        );
+        ): const SizedBox(width: 10);
 
         final groupHoursWidget = Container(
           child: Column(
@@ -548,5 +549,13 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
           : separator;
     }
 
+  }
+
+  Widget _showDayWidget(bool showDays, DigitItem days) {
+    if(widget.isShowDay){
+      return showDays ? days : const SizedBox.shrink();
+    }else{
+      return const SizedBox.shrink();
+    }
   }
 }

@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-const defaultDuration = Duration(days: 00, hours: 00, minutes: 00, seconds: 10);
+const defaultDuration = Duration(minutes: 20, seconds: 10);
 const defaultPadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
 
 class ExampleSlideCountdown extends StatelessWidget {
@@ -123,6 +123,10 @@ class ExampleSlideCountdown extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _shouldShowDays(Duration p1) {
+    return false;
   }
 }
 
