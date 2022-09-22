@@ -213,10 +213,6 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
 
   @override
   void didUpdateWidget(covariant SlideCountdown oldWidget) {
-    if (!oldWidget.duration.isSameDuration(widget.duration)) {
-      _init();
-    }
-
     if (widget.countUp != oldWidget.countUp ||
         widget.infinityCountUp != oldWidget.infinityCountUp) {
       _streamDuration.dispose();
