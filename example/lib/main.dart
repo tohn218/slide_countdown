@@ -20,8 +20,26 @@ class MyApp extends StatelessWidget {
 const defaultDuration = Duration(minutes: 20, seconds: 10);
 const defaultPadding = EdgeInsets.symmetric(horizontal: 10, vertical: 5);
 
-class ExampleSlideCountdown extends StatelessWidget {
+class ExampleSlideCountdown extends StatefulWidget {
   const ExampleSlideCountdown({Key? key}) : super(key: key);
+
+  @override
+  State<ExampleSlideCountdown> createState() => _ExampleSlideCountdownState();
+}
+
+class _ExampleSlideCountdownState extends State<ExampleSlideCountdown> {
+  Duration duration = Duration();
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 4), () {
+      setState(() {
+        duration = Duration(seconds: 5);
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +102,7 @@ class ExampleSlideCountdown extends StatelessWidget {
               child: Text('Localization Custom Duration Title'),
             ),
             SlideCountdown(
-              duration: defaultDuration,
+              duration: duration,
               padding: defaultPadding,
               separatorType: SeparatorType.title,
               durationTitle: DurationTitle.id(),
@@ -105,96 +123,24 @@ class ExampleSlideCountdown extends StatelessWidget {
               padding: EdgeInsets.only(top: 20, bottom: 10),
               child: Text('With Column, & SlideDirection.up'),
             ),
-            const SlideCountdown(
-              decoration: BoxDecoration(
-                color: Colors.black45
-              ),
-              textStyle: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w600),
-              duration: defaultDuration,
+            SlideCountdown(
+              decoration: BoxDecoration(color: Colors.black45),
+              textStyle: TextStyle(
+                  fontSize: 26,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600),
+              duration: duration,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               slideDirection: SlideDirection.up,
               subTextStyle: TextStyle(fontSize: 16, color: Colors.white),
-              durationTitle: DurationTitle(days: 'Days', hours: 'Hours', minutes: 'minutes', seconds: 'seconds'),
+              durationTitle: DurationTitle(
+                  days: 'Days',
+                  hours: 'Hours',
+                  minutes: 'minutes',
+                  seconds: 'seconds'),
               showZeroValue: true,
               separatorPadding: EdgeInsets.symmetric(horizontal: 22),
               isSubTitle: true,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  bool _shouldShowDays(Duration p1) {
-    return false;
-  }
-}
-
-class ExampleControlDuration extends StatefulWidget {
-  const ExampleControlDuration({Key? key}) : super(key: key);
-
-  @override
-  State<ExampleControlDuration> createState() => _ExampleControlDurationState();
-}
-
-class _ExampleControlDurationState extends State<ExampleControlDuration> {
-  late final StreamDuration _streamDuration;
-
-  @override
-  void initState() {
-    _streamDuration = StreamDuration(
-      const Duration(hours: 2),
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _streamDuration.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Example Control Duration'),
-      ),
-      body: SizedBox.expand(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SlideCountdown(
-              // This duration no effect if you customize stream duration
-              duration: const Duration(seconds: 10),
-              streamDuration: _streamDuration,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => _streamDuration.pause(),
-              child: Text('Pause'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => _streamDuration.play(),
-              child: Text('Play'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // this will add 10 minutes to the remaining duration
-                _streamDuration.add(Duration(minutes: 10));
-              },
-              child: Text('Add Duration'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // this will subtract 10 minutes to the remaining duration
-                _streamDuration.subtract(Duration(minutes: 10));
-              },
-              child: Text('Subtract Duration'),
             ),
           ],
         ),

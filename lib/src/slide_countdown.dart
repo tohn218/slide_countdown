@@ -201,6 +201,10 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
   @override
   void initState() {
     super.initState();
+    _init();
+  }
+
+  void _init() {
     _notifiyDuration = NotifiyDuration(widget.duration);
     _disposed = false;
     _streamDurationListener();
@@ -209,13 +213,13 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
 
   @override
   void didUpdateWidget(covariant SlideCountdown oldWidget) {
+    if (!oldWidget.duration.isSameDuration(widget.duration)) {
+      _init();
+    }
+
     if (widget.countUp != oldWidget.countUp ||
         widget.infinityCountUp != oldWidget.infinityCountUp) {
       _streamDuration.dispose();
-      _notifiyDuration = NotifiyDuration(widget.duration);
-      _disposed = false;
-      _streamDurationListener();
-      _updateConfigurationNotifier(widget.duration);
     }
     if (widget.duration != oldWidget.duration) {
       _streamDuration.changeDuration(widget.duration);
@@ -324,7 +328,9 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
         final defaultShowSeconds =
             duration.inSeconds < 1 && !widget.showZeroValue ? false : true;
 
-        final showDays = widget.shouldShowDays != null ? widget.shouldShowDays!(duration) : defaultShowDays;
+        final showDays = widget.shouldShowDays != null
+            ? widget.shouldShowDays!(duration)
+            : defaultShowDays;
         final showHours = widget.shouldShowHours != null
             ? widget.shouldShowHours!(duration)
             : defaultShowHours;
@@ -346,7 +352,9 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
           countUp: widget.countUp,
           slideAnimationDuration: widget.slideAnimationDuration,
           separator: _separatorDays(durationTitle.days, separator) ?? '',
-          separatorPadding: widget.isSubTitle ? const EdgeInsets.symmetric(horizontal: 22) : widget.separatorPadding,
+          separatorPadding: widget.isSubTitle
+              ? const EdgeInsets.symmetric(horizontal: 22)
+              : widget.separatorPadding,
           textDirection: widget.isSubTitle ? null : widget.textDirection,
           fade: widget.fade,
           digitsNumber: widget.digitsNumber,
@@ -364,7 +372,9 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
           countUp: widget.countUp,
           slideAnimationDuration: widget.slideAnimationDuration,
           separator: _separatorHours(durationTitle.hours, separator) ?? '',
-          separatorPadding: widget.isSubTitle ? const EdgeInsets.symmetric(horizontal: 22) : widget.separatorPadding,
+          separatorPadding: widget.isSubTitle
+              ? const EdgeInsets.symmetric(horizontal: 22)
+              : widget.separatorPadding,
           textDirection: widget.isSubTitle ? null : widget.textDirection,
           fade: widget.fade,
           digitsNumber: widget.digitsNumber,
@@ -382,7 +392,9 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
           countUp: widget.countUp,
           slideAnimationDuration: widget.slideAnimationDuration,
           separator: _separatorMinutes(durationTitle.minutes, separator) ?? '',
-          separatorPadding: widget.isSubTitle ? const EdgeInsets.symmetric(horizontal: 22) : widget.separatorPadding,
+          separatorPadding: widget.isSubTitle
+              ? const EdgeInsets.symmetric(horizontal: 22)
+              : widget.separatorPadding,
           textDirection: widget.isSubTitle ? null : widget.textDirection,
           fade: widget.fade,
           digitsNumber: widget.digitsNumber,
@@ -399,7 +411,9 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
           countUp: widget.countUp,
           slideAnimationDuration: widget.slideAnimationDuration,
           separator: _separatorSeconds(durationTitle.seconds, separator) ?? '',
-          separatorPadding: widget.isSubTitle ? EdgeInsets.symmetric(horizontal: isSeparatorTitle ? 0 : 22) : widget.separatorPadding,
+          separatorPadding: widget.isSubTitle
+              ? EdgeInsets.symmetric(horizontal: isSeparatorTitle ? 0 : 22)
+              : widget.separatorPadding,
           textDirection: widget.isSubTitle ? null : widget.textDirection,
           fade: widget.fade,
           digitsNumber: widget.digitsNumber,
@@ -414,18 +428,21 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
 
         final secondsWidget = showSeconds ? seconds : const SizedBox.shrink();
 
-        final groupDaysWidget = widget.isShowDay ? Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              daysWidget,
-              Container(
-                transform: Matrix4.translationValues(-25, 0, 0),
-                child: Text(durationTitle.days.toUpperCase(), style: widget.subTextStyle),
+        final groupDaysWidget = widget.isShowDay
+            ? Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    daysWidget,
+                    Container(
+                      transform: Matrix4.translationValues(-25, 0, 0),
+                      child: Text(durationTitle.days.toUpperCase(),
+                          style: widget.subTextStyle),
+                    )
+                  ],
+                ),
               )
-            ],
-          ),
-        ): const SizedBox(width: 10);
+            : const SizedBox(width: 10);
 
         final groupHoursWidget = Container(
           child: Column(
@@ -434,7 +451,8 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
               hoursWidget,
               Container(
                 transform: Matrix4.translationValues(-25, 0, 0),
-                child: Text(durationTitle.hours.toUpperCase(), style: widget.subTextStyle),
+                child: Text(durationTitle.hours.toUpperCase(),
+                    style: widget.subTextStyle),
               )
             ],
           ),
@@ -447,7 +465,8 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
               minutesWidget,
               Container(
                 transform: Matrix4.translationValues(-25, 0, 0),
-                child: Text(durationTitle.minutes.toUpperCase(), style: widget.subTextStyle),
+                child: Text(durationTitle.minutes.toUpperCase(),
+                    style: widget.subTextStyle),
               )
             ],
           ),
@@ -459,7 +478,8 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
             children: [
               secondsWidget,
               Container(
-                child: Text(durationTitle.seconds.toUpperCase(), style: widget.subTextStyle),
+                child: Text(durationTitle.seconds.toUpperCase(),
+                    style: widget.subTextStyle),
               )
             ],
           ),
@@ -493,7 +513,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
           padding: widget.padding,
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children:[
+            children: [
               leadingIcon,
               groupDaysWidget,
               groupHoursWidget,
@@ -514,50 +534,41 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
   }
 
   String? _separatorMinutes(String minutes, String separator) {
-    if(widget.isSubTitle){
+    if (widget.isSubTitle) {
       return separator;
-    }else{
-      return widget.separatorType == SeparatorType.title
-          ? minutes
-          : separator;
+    } else {
+      return widget.separatorType == SeparatorType.title ? minutes : separator;
     }
-
   }
+
   String? _separatorDays(String days, String separator) {
-    if(widget.isSubTitle){
+    if (widget.isSubTitle) {
       return separator;
-    }else{
-      return widget.separatorType == SeparatorType.title
-          ? days
-          : separator;
+    } else {
+      return widget.separatorType == SeparatorType.title ? days : separator;
     }
-
   }
+
   String? _separatorHours(String hours, String separator) {
-    if(widget.isSubTitle){
+    if (widget.isSubTitle) {
       return separator;
-    }else{
-      return widget.separatorType == SeparatorType.title
-          ? hours
-          : separator;
+    } else {
+      return widget.separatorType == SeparatorType.title ? hours : separator;
     }
-
   }
-  String? _separatorSeconds(String seconds, String separator) {
-    if(widget.isSubTitle){
-      return null;
-    }else{
-      return widget.separatorType == SeparatorType.title
-          ? seconds
-          : separator;
-    }
 
+  String? _separatorSeconds(String seconds, String separator) {
+    if (widget.isSubTitle) {
+      return null;
+    } else {
+      return widget.separatorType == SeparatorType.title ? seconds : separator;
+    }
   }
 
   Widget _showDayWidget(bool showDays, DigitItem days) {
-    if(widget.isShowDay){
+    if (widget.isShowDay) {
       return showDays ? days : const SizedBox.shrink();
-    }else{
+    } else {
       return const SizedBox.shrink();
     }
   }
