@@ -197,6 +197,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
   late StreamDuration _streamDuration;
   late NotifiyDuration _notifiyDuration;
   bool _disposed = false;
+  bool _isDone = false;
 
   @override
   void initState() {
@@ -236,6 +237,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
         StreamDuration(
           widget.duration,
           onDone: () {
+            setState(() => _isDone = true);
             if (widget.onDone != null) {
               widget.onDone!();
             }
@@ -310,7 +312,7 @@ class _SlideCountdownState extends State<SlideCountdown> with CountdownMixin {
       child: widget.suffixIcon ?? const SizedBox.shrink(),
     );
 
-    return ValueListenableBuilder(
+    return _isDone ? const SizedBox() : ValueListenableBuilder(
       valueListenable: _notifiyDuration,
       builder: (BuildContext context, Duration duration, Widget? child) {
         if (duration.inSeconds <= 0 && child != null) return child;
